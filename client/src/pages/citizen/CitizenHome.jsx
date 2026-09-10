@@ -11,30 +11,33 @@ import {
   PawPrint,
   Route,
   Users,
-  MessageCircle,
-  LogOut
+  MessageCircle
 } from "lucide-react";
 
 import RiskCard from "../../components/RiskCard";
 import WeatherCard from "../../components/WeatherCard";
+import LanguageSwitcher from "../../components/LanguageSwitcher";
 import { getWeather, calculateRisk } from "../../services/api";
-
-const quickAccess = [
-  { icon: User, label: "Profile", path: "/citizen/profile" },
-  { icon: MapPinned, label: "Location", path: "/citizen/location" },
-  { icon: Calendar, label: "Forecast", path: "/citizen/forecast" },
-  { icon: Shield, label: "Precautions", path: "/citizen/precautions" },
-  { icon: Building2, label: "Facilities", path: "/citizen/facilities" },
-  { icon: PawPrint, label: "Animals", path: "/citizen/animals" },
-  { icon: Route, label: "Travel", path: "/citizen/travel" },
-  { icon: Users, label: "Family", path: "/citizen/family" },
-  { icon: MessageCircle, label: "Assistant", path: "/citizen/assistant" }
-];
+import { useLanguage } from "../../context/LanguageContext";
+import { translateReason } from "../../data/translations";
 
 export default function CitizenHome() {
   const [weather, setWeather] = useState(null);
   const [risk, setRisk] = useState(null);
   const navigate = useNavigate();
+  const { t } = useLanguage();
+
+  const quickAccess = [
+    { icon: User, label: t("profile"), path: "/citizen/profile" },
+    { icon: MapPinned, label: t("location"), path: "/citizen/location" },
+    { icon: Calendar, label: t("forecast"), path: "/citizen/forecast" },
+    { icon: Shield, label: t("precautions"), path: "/citizen/precautions" },
+    { icon: Building2, label: t("facilities"), path: "/citizen/facilities" },
+    { icon: PawPrint, label: t("animals"), path: "/citizen/animals" },
+    { icon: Route, label: t("travel"), path: "/citizen/travel" },
+    { icon: Users, label: t("family"), path: "/citizen/family" },
+    { icon: MessageCircle, label: t("assistant"), path: "/citizen/assistant" }
+  ];
 
   useEffect(() => {
     async function load() {
@@ -64,26 +67,30 @@ export default function CitizenHome() {
   }, []);
 
   if (!weather || !risk) {
-    return <div className="loading">Loading HeatNexa...</div>;
+    return <div className="loading">{t("loading")}</div>;
   }
 
   return (
     <div className="mobile-page">
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "12px" }}>
+        <LanguageSwitcher compact />
+        <button
+          className="icon-button"
+          onClick={() => navigate("/citizen/notifications")}
+          title={t("notifications")}
+        >
+          <Bell size={18} />
+        </button>
+      </div>
+
       <header className="mobile-header">
         <div>
           <small>
             <MapPin size={12} />
-            Goa, Madgaon
+            {t("locationName")}
           </small>
-          <h2>Good evening 👋</h2>
+          <h2>{t("goodEvening")}</h2>
         </div>
-
-        <button
-          className="icon-button"
-          onClick={() => navigate("/citizen/notifications")}
-        >
-          <Bell size={18} />
-        </button>
       </header>
 
       <RiskCard score={risk.score} level={risk.level} />
@@ -91,7 +98,7 @@ export default function CitizenHome() {
       <WeatherCard weather={weather} />
 
       <div className="panel">
-        <div className="section-title">Why is the risk high?</div>
+        <div className="section-title">{t("whyRiskHigh")}</div>
 
         <ul className="reason-list">
           {(risk.reasons || [
@@ -100,7 +107,7 @@ export default function CitizenHome() {
             "☀️ Strong solar exposure",
             "💨 Low wind speed"
           ]).map((r, i) => (
-            <li key={i}>{r}</li>
+            <li key={i}>{translateReason(r, t)}</li>
           ))}
         </ul>
 
@@ -108,12 +115,12 @@ export default function CitizenHome() {
           className="primary-button"
           onClick={() => navigate("/citizen/precautions")}
         >
-          What should you do?
+          {t("whatShouldYouDo")}
         </button>
       </div>
 
       <div className="panel">
-        <div className="section-title">Quick Access</div>
+        <div className="section-title">{t("quickAccess")}</div>
         <div className="quick-grid">
           {quickAccess.map((item) => (
             <button

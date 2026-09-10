@@ -1,11 +1,11 @@
-export default function RiskBadge({ level }) {
+export default function RiskBadge({ level, label }) {
   return (
     <span
       className={`risk-badge ${level
         ?.toLowerCase()
         .replace(" ", "-")}`}
     >
-      {level}
+      {label || level}
     </span>
   );
 }

@@ -11,27 +11,34 @@ import {
   LogOut
 } from "lucide-react";
 import Logo from "./Logo";
-
-const sidebarItems = [
-  { path: "/authority", icon: LayoutDashboard, label: "Dashboard" },
-  { path: "/authority/map", icon: Map, label: "Heat Risk Map" },
-  { path: "/authority/trends", icon: TrendingUp, label: "Trends" },
-  { path: "/authority/alerts", icon: Bell, label: "Alerts" },
-  { path: "/authority/action-plan", icon: ClipboardList, label: "Action Plan" },
-  { path: "/authority/simulator", icon: FlaskConical, label: "What-If Simulator" },
-  { path: "/authority/prioritization", icon: BarChart3, label: "Ward Analytics" },
-  { path: "/authority/outcomes", icon: Activity, label: "Outcomes" }
-];
+import LanguageSwitcher from "./LanguageSwitcher";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function AuthoritySidebar() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLanguage();
+
+  const sidebarItems = [
+    { path: "/authority", icon: LayoutDashboard, label: t("dashboard") },
+    { path: "/authority/map", icon: Map, label: t("heatMap") },
+    { path: "/authority/trends", icon: TrendingUp, label: t("trends") },
+    { path: "/authority/alerts", icon: Bell, label: t("alerts") },
+    { path: "/authority/action-plan", icon: ClipboardList, label: t("actionPlan") },
+    { path: "/authority/simulator", icon: FlaskConical, label: t("simulator") },
+    { path: "/authority/prioritization", icon: BarChart3, label: t("wardAnalytics") },
+    { path: "/authority/outcomes", icon: Activity, label: t("outcomes") }
+  ];
 
   return (
     <aside className="authority-sidebar">
       <div className="sidebar-logo">
         <Logo small />
         <strong className="sidebar-brand">HeatNexa</strong>
+      </div>
+
+      <div style={{ padding: "0 16px 12px" }}>
+        <LanguageSwitcher compact />
       </div>
 
       <nav className="sidebar-nav">
@@ -55,7 +62,7 @@ export default function AuthoritySidebar() {
         }}
       >
         <LogOut size={18} />
-        <span>Logout</span>
+        <span>{t("logout")}</span>
       </button>
     </aside>
   );

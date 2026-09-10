@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, ShieldAlert } from "lucide-react";
+import { ArrowLeft, ShieldAlert, Droplets, Sun, Clock } from "lucide-react";
 import { calculateRisk } from "../../services/api";
+import { useLanguage } from "../../context/LanguageContext";
+import { translateRecommendation } from "../../data/translations";
 
 export default function Precautions() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [recommendations, setRecommendations] = useState([]);
   const [profileInfo, setProfileInfo] = useState("");
 
@@ -17,33 +20,33 @@ export default function Precautions() {
     setProfileInfo(`${profile.occupation} • Age ${profile.age}${profile.conditions?.length ? " • " + profile.conditions.join(", ") : ""}`);
 
     calculateRisk(profile).then((data) => {
-      setRecommendations(data.recommendations);
+      setRecommendations(data.recommendations || []);
     });
   }, []);
 
   return (
     <div className="mobile-page">
       <button className="back-button" onClick={() => navigate("/citizen")}>
-        <ArrowLeft size={18} /> Back
+        <ArrowLeft size={18} /> {t("back")}
       </button>
 
-      <h2><ShieldAlert size={20} /> Your Precautions</h2>
+      <h2><ShieldAlert size={20} /> {t("precautions")}</h2>
 
-      <p className="muted">Personalized for you: {profileInfo}</p>
+      <p className="muted">{t("personalizedForProfile")}: <strong>{profileInfo}</strong></p>
 
       {recommendations.map((item, index) => (
-        <div className="recommendation-card" key={index}>
-          <span>⚠</span>
-          <p>{item}</p>
+        <div className="recommendation-card" key={index} style={{ borderLeft: "3px solid var(--orange)" }}>
+          <span style={{ color: "var(--orange)", fontSize: "16px" }}>⚡</span>
+          <p>{translateRecommendation(item, t)}</p>
         </div>
       ))}
 
       <button
-        className="outline-button full"
+        className="primary-button"
         onClick={() => navigate("/citizen/profile")}
         style={{ marginTop: 20 }}
       >
-        View More Tips
+        {t("updateProfileTips")}
       </button>
     </div>
   );

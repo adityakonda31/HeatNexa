@@ -6,18 +6,20 @@ import {
   Bell,
   User
 } from "lucide-react";
-
-const navItems = [
-  { path: "/citizen", icon: Home, label: "Home" },
-  { path: "/citizen/facilities", icon: Map, label: "Map" },
-  { path: "/citizen/assistant", icon: MessageCircle, label: "Assistant" },
-  { path: "/citizen/notifications", icon: Bell, label: "Alerts" },
-  { path: "/citizen/profile", icon: User, label: "Profile" }
-];
+import { useLanguage } from "../context/LanguageContext";
 
 export default function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLanguage();
+
+  const navItems = [
+    { path: "/citizen", icon: Home, label: t("home") },
+    { path: "/citizen/facilities", icon: Map, label: t("facilities") },
+    { path: "/citizen/assistant", icon: MessageCircle, label: t("assistant") },
+    { path: "/citizen/notifications", icon: Bell, label: t("notifications") },
+    { path: "/citizen/profile", icon: User, label: t("profile") }
+  ];
 
   return (
     <nav className="bottom-nav">

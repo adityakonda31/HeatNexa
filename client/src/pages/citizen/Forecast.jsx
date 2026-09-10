@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Calendar, ShieldCheck, AlertOctagon } from "lucide-react";
 import {
   LineChart,
   Line,
@@ -11,9 +11,11 @@ import {
 } from "recharts";
 
 import { getForecast } from "../../services/api";
+import { useLanguage } from "../../context/LanguageContext";
 
 export default function Forecast() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -23,10 +25,10 @@ export default function Forecast() {
   return (
     <div className="mobile-page">
       <button className="back-button" onClick={() => navigate("/citizen")}>
-        <ArrowLeft size={18} /> Back
+        <ArrowLeft size={18} /> {t("back")}
       </button>
 
-      <h2>7-Day Heat Forecast</h2>
+      <h2><Calendar size={20} /> {t("forecast")}</h2>
 
       <div className="forecast-days">
         {data.map((d, i) => (
@@ -36,16 +38,17 @@ export default function Forecast() {
           >
             <span>{d.day}</span>
             <strong>{d.score}</strong>
+            <small style={{ color: "#aaa", fontSize: "10px" }}>{d.temp}°C</small>
           </div>
         ))}
       </div>
 
       <div className="panel chart-panel">
-        <div className="section-title">Heat Risk Trend</div>
+        <div className="section-title">{t("heatRiskTrend")}</div>
         <ResponsiveContainer width="100%" height={230}>
           <LineChart data={data}>
             <XAxis dataKey="day" stroke="#666" />
-            <YAxis stroke="#666" />
+            <YAxis stroke="#666" domain={[0, 100]} />
             <Tooltip
               contentStyle={{ background: "#1a1a1a", border: "1px solid #333", borderRadius: 8 }}
             />
@@ -62,12 +65,16 @@ export default function Forecast() {
 
       <div className="safe-time">
         <div className="safe-good">
-          <small>Best Time</small>
+          <small style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>
+            <ShieldCheck size={14} /> {t("bestTime")}
+          </small>
           <strong>6 AM – 9 AM</strong>
         </div>
 
         <div className="safe-bad">
-          <small>Avoid</small>
+          <small style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "4px" }}>
+            <AlertOctagon size={14} /> {t("avoid")}
+          </small>
           <strong>12 PM – 4 PM</strong>
         </div>
       </div>

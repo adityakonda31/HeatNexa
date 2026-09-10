@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Bell } from "lucide-react";
+import { useLanguage } from "../../context/LanguageContext";
 
 const notifications = [
   {
@@ -24,14 +25,15 @@ const notifications = [
 
 export default function Notifications() {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   return (
     <div className="mobile-page">
       <button className="back-button" onClick={() => navigate("/citizen")}>
-        <ArrowLeft size={18} /> Back
+        <ArrowLeft size={18} /> {t("back")}
       </button>
 
-      <h2>Notifications</h2>
+      <h2><Bell size={20} /> {t("notifications")}</h2>
 
       {notifications.map((item, index) => (
         <div className={`notification-card ${item.severity}`} key={index}>

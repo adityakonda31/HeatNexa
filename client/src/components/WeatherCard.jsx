@@ -4,14 +4,18 @@ import {
   Wind,
   Sun
 } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
+import { translateSolar } from "../data/translations";
 
 export default function WeatherCard({ weather }) {
+  const { t } = useLanguage();
   if (!weather) return null;
+
   return (
     <div className="panel">
       <div className="section-title">
         <Sun size={18} />
-        Weather Report
+        {t("weatherReport")}
       </div>
 
       <div className="weather-main">
@@ -19,27 +23,27 @@ export default function WeatherCard({ weather }) {
 
         <div>
           <strong>{weather.temperature}°C</strong>
-          <span>Feels like {weather.feelsLike}°C</span>
+          <span>{t("feelsLike")} {weather.feelsLike}°C</span>
         </div>
       </div>
 
       <div className="weather-grid">
         <div>
           <Droplets size={16} />
-          <span>Humidity</span>
+          <span>{t("humidity")}</span>
           <strong>{weather.humidity}%</strong>
         </div>
 
         <div>
           <Wind size={16} />
-          <span>Wind</span>
+          <span>{t("wind")}</span>
           <strong>{weather.wind} km/h</strong>
         </div>
 
         <div>
           <Sun size={16} />
-          <span>Solar</span>
-          <strong>{weather.solar}</strong>
+          <span>{t("solar")}</span>
+          <strong>{translateSolar(weather.solar, t)}</strong>
         </div>
       </div>
     </div>
